@@ -1,5 +1,5 @@
 # shop.py 简易网上购物系统【主程序】
-# 功能：展示商品、选择商品、输入数量，调用checkout.py完成结算
+# 功能：展示商品、选择商品、输入数量、选择身份，调用checkout结算（带学生10%折扣）
 
 # 从同文件夹的checkout文件中，导入checkout函数
 from checkout import checkout
@@ -63,10 +63,20 @@ def main():
             print("❌ 购买数量必须大于0！")
             continue
 
-        # ========== 重点：调用外部文件的结算函数 ==========
-        # 把商品名、单价、数量传给 checkout()
-        # pay_result 接收 checkout 返回的 True / False
-        pay_result = checkout(buy_good["name"], buy_good["price"], num)
+        # ===== 新增：询问是否是学生 =====
+        while True:
+            stu_input = input("请问你是学生吗？(y/n)：")
+            if stu_input.lower() == "y":
+                is_student = True
+                break
+            elif stu_input.lower() == "n":
+                is_student = False
+                break
+            else:
+                print("输入无效，请输入 y 或者 n！")
+
+        # ========== 重点：调用外部文件的结算函数，多传is_student参数 ==========
+        pay_result = checkout(buy_good["name"], buy_good["price"], num, is_student)
 
         # 根据结算模块返回的结果，提示订单状态
         if pay_result:
